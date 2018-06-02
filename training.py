@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense
 import numpy
-
+import preporcessing as pre
 
 # fix random seed for reproducibility
 numpy.random.seed(5)
@@ -13,6 +13,10 @@ dataset = numpy.loadtxt("dataset.csv", delimiter=",")
 # split into input (X) and output (Y) variables
 inputs = dataset[:,0:8]
 target = dataset[:,8]
+
+#preprocessing of the input
+
+input = pre.dataRescale(inputs)
 
 # creating the model
 model = Sequential()
@@ -26,10 +30,10 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # Fit the model
-model.fit(inputs, target, epochs=150, batch_size=10, verbose=2)
+model.fit(input, target, epochs=150, batch_size=10, verbose=2)
 
 # evaluating the model
-scores = model.evaluate(inputs, target)
+scores = model.evaluate(input, target)
 print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
 #Saving the model
